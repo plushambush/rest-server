@@ -1,0 +1,20 @@
+[Unit]
+Description=High performance HTTP server that implements restic's REST backend API.
+After=network.target
+
+[Service]
+Type=forking
+EnvironmentFile=/etc/sysconfig/rest-server
+User=_c2
+Group=_c2
+PermissionsStartOnly=true
+# this wrapper and Type=forking are needed
+# for geting exit code 1 on start if rest-server can't start
+ExecStartPre=/sbin/rest-server-start-pre
+ExecStart=/sbin/rest-server-starter $SERVERARGS
+ExecStopPost=/sbin/rest-server-stop-post
+RestartSec=10
+TimeoutStartSec=10
+
+[Install]
+WantedBy=multi-user.target

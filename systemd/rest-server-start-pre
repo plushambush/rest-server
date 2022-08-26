@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source /etc/sysconfig/rest-server
+
+if [ -z ${MOUNTPOINT} ]; then
+	exit 0
+fi
+
+grep $MOUNTPOINT /proc/mounts
+
+if [ $? = 0 ] ; then
+	echo "ERROR: Something is mounted to $MOUNTPOINT. rest-server will not be started."
+	exit 1
+fi
+
+mkdir $MOUNTPOINT
+mount $MOUNTARGS
+
+if [ $? != 0 ] ; then
+	echo "ERROR: Can't mount storage to $MOUNTPOINT. rest-server will not be started."
+	exit 1
+fi
+
+sleep 2

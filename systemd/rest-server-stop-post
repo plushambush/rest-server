@@ -3,7 +3,7 @@
 source /etc/sysconfig/rest-server
 
 if [ -z ${MOUNTPOINT} ]; then
-	exit 0
+    exit 0
 fi
 
 echo "umount $MOUNTPOINT"

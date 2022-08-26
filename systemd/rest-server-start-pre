@@ -2,23 +2,44 @@
 
 source /etc/sysconfig/rest-server
 
+_umount() {
+    echo "umount $MOUNTPOINT"
+    umount $MOUNTPOINT
+}
+
+check_mount() {
+    MOUNTED=0
+    grep $MOUNTPOINT /proc/mounts
+    if [ $? = 0 ] ; then
+        MOUNTED=1
+    fi
+}
+
 if [ -z ${MOUNTPOINT} ]; then
-	exit 0
+    exit 0
 fi
 
-grep $MOUNTPOINT /proc/mounts
+mkdir -p $MOUNTPOINT
 
-if [ $? = 0 ] ; then
-	echo "ERROR: Something is mounted to $MOUNTPOINT. rest-server will not be started."
-	exit 1
+check_mount
+
+if [ $MOUNTED = 1 ] ; then
+    echo "ERROR: Something is mounted to $MOUNTPOINT"
+    _umount
+    check_mount
+    if [ $MOUNTED = 1 ] ; then
+        echo "ERROR: Something is still mounted to $MOUNTPOINT. rest-server will not be started."
+        sleep 0.2 # we need time to write error message before exit
+        exit 1
+    fi
 fi
 
-mkdir $MOUNTPOINT
 mount $MOUNTARGS
 
 if [ $? != 0 ] ; then
-	echo "ERROR: Can't mount storage to $MOUNTPOINT. rest-server will not be started."
-	exit 1
+    echo "ERROR: Can't mount storage to $MOUNTPOINT. rest-server will not be started."
+    sleep 0.2
+    exit 1
 fi
 
 sleep 2

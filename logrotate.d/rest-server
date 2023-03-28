@@ -1,0 +1,10 @@
+/var/log/rest-server.log
+/var/log/*/rest-server.log
+{
+    rotate 10
+    daily
+    missingok
+    compress
+    dateext
+    copytruncate
+}

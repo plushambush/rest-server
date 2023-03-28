@@ -100,12 +100,14 @@ export GOFLAGS=-mod=vendor
 mkdir -p %{buildroot}%{_unitdir}
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 mkdir -p %{buildroot}%{_sbindir}
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -p -m 755 %{gobuilddir}/bin/%{name} %{buildroot}%{_sbindir}
 install -p -m 755 systemd/%{name}-starter %{buildroot}%{_sbindir}
 install -p -m 755 systemd/%{name}-start-pre %{buildroot}%{_sbindir}
 install -p -m 755 systemd/%{name}-stop-post %{buildroot}%{_sbindir}
 install -m644 systemd/rest-server.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -m644 systemd/rest-server.service %{buildroot}%{_unitdir}
+install -m644 logrotate.d/%{name} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 
 %files
@@ -116,6 +118,7 @@ install -m644 systemd/rest-server.service %{buildroot}%{_unitdir}
 %{_sbindir}/%{name}-start-pre
 %{_sbindir}/%{name}-stop-post
 %{_unitdir}/%{name}.service
+%{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %post

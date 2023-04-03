@@ -157,4 +157,4 @@ Finally, the Rest Server implementation is really simple and as such could be us
 
 ## Contributors
 
-Contributors are welcome, just open a new issue / pull request.
+Contributors are welcome, just open a new issue / pull request..
